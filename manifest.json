@@ -47,8 +47,7 @@
   "content_scripts": [
     {
       "matches": [
-        "*://*/hello.html",
-        "*://*/todo_list.html"
+        "*://*/hello.html"
       ],
       "js": [
         "src/popup/popup.js",
