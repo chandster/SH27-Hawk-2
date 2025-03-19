@@ -64,6 +64,35 @@
   --primary-hover: #d35400;
   --accent-color: #e65100;
   --panel-box-shadow: 0px 4px 15px rgba(230, 126, 34, 0.2);
+
+    /* Dark theme colors only */
+    --ui-pane-color: rgba(35, 35, 35, 0.95);
+    --pane-text-color: white;
+    --primary-color: #e65100;
+    --primary-hover: #d35400;
+    --accent-color: #e65100;
+    --panel-bg: rgba(28, 28, 30, 0.95);
+    --search-bar-color: rgba(40, 40, 40, 0.95);
+    --settings-section-color: rgba(45, 45, 45, 0.95);
+    --settings-section-outline: none;
+    --panel-box-shadow: 0px 4px 20px rgba(230, 126, 34, 0.2);
+    --placeholder-text-color: #c2c2c2;
+    --search-svg-color: white;
+    --filter-active-color: white;
+    --filter-color: white;
+    --dynamic-svg-color: white;
+    --selected-color: white;
+    --modal-form-section-color: rgba(35, 35, 35, 0.95);
+    --warn-color: white;
+    --del-progress-color: #321717c9;
+    --cont-color: rgba(230, 126, 34, 0.25);
+    --circle-ind-color: #3d4144;
+    --wallpaper-preview: ../images/comic_bg_dark.png;
+    --settings-bg: url('../images/comic_cogs_bg_dark.png');
+    --comic-bg: url('../images/comic_bg_dark.png');
+    --note-item-hover-color: #1e1e1f;
+    --text-color: #ecf0f1;
+    --background-dark: #1a1a1a;  
 }
 
 /* Dark mode variables */
@@ -111,6 +140,25 @@ body, html {
   line-height: 1.6;
   color: var(--text-dark);
   transition: var(--transition);
+}
+
+/* Base Styles - Dark theme only */
+body, html {
+  font-family: 'Roboto', sans-serif !important;
+  background-color: #262626;
+  margin: 0;
+  max-width: 100%;
+  height: 100%;
+  padding: 0!important;
+  overflow-x: hidden;
+  line-height: 1.6;
+  color: var(--text-color);
+  transition: var(--transition);
+}
+
+/* Add dark class to html by default */
+html {
+  background-color: var(--background-dark);
 }
 
 @media (prefers-color-scheme: dark) {
