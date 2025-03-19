@@ -82,13 +82,18 @@ function removeHash() {
 
 function exportAll() {
   chrome.storage.local.get(null, (data) => {
-    const blob = new Blob([JSON.stringify(data, null, 2)], {
+    // Create a clean copy of the data
+    const exportData = { ...data };
+    
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
       type: 'application/json',
     });
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(blob);
-    downloadLink.download = 'todomake_backup_data.json';
+    downloadLink.download = 'hawk_backup_data.json';
     downloadLink.click();
+    
+    URL.revokeObjectURL(downloadLink.href);
   });
 }
 
@@ -573,7 +578,7 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
       });
     });
 
-    $(document).on('click', '.btn.btn-primary.backup-btn', (event) => {
+    $(document).on('click', '.btn.btn-secondary.backup-btn', (event) => {
       const $backupBtn = $(event.currentTarget);
       exportAll();
       $backupBtn.text('Downloaded data backup');
@@ -582,14 +587,14 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
       }, 1000);
     });
 
-    $(document).on('click', '.btn.btn-primary.restore-selection-btn', (event) => {
+    $(document).on('click', '.btn.btn-secondary.restore-selection-btn', (event) => {
       const $restoreBtn = $(event.currentTarget);
       if (curTags !== null) {
         restoreTags(curTags);
       }
       restoreSelectedNotes();
       restoreSelectedTasks();
-      restoreSelectedIndexEntries(); `
+      restoreSelectedIndexEntries();
       $restoreBtn.text('Restored selected data!');
       setTimeout(() => {
         $restoreBtn.text('Perform overwriting restore of selected data');
@@ -600,7 +605,7 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
       chrome.storage.local.set({ bg: '' }, () => {
         updateWallpaperPreview();
         chrome.runtime.sendMessage(null, 'wallpaper');
-      });`;
+      });
     });
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
@@ -640,30 +645,30 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
       $(`#${$entry.attr('id')}-pane`).removeClass('d-none');
     }
 
-    $(document).on('change', '#jsonAllInput', (event) => {
+    $('#jsonAllInput').on('change', (event) => {
       const selectedFile = event.target.files[0];
-
       if (selectedFile) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          const content = JSON.parse(e.target.result);
-          if (Object.prototype.hasOwnProperty.call(content, 'allLastTitles')) {
-            restoreLastTitles(content.allLastTitles);
-          }
-          if (Object.prototype.hasOwnProperty.call(content, 'tags')) {
-            restoreTags(content.tags);
-          }
-          if (Object.prototype.hasOwnProperty.call(content, 'tasks')) {
-            const { tasks } = content;
-            overwriteTasks(tasks);
-          }
-          if (Object.prototype.hasOwnProperty.call(content, 'indexed')) {
-            const indexArray = Object.values(content.indexed);
-            overwriteIndex(indexArray);
-          }
-          if (Object.prototype.hasOwnProperty.call(content, 'notes')) {
-            const notesArray = Object.values(content.notes);
-            overwriteNotes(notesArray);
+          try {
+            const content = JSON.parse(e.target.result);
+            // Restore all data categories
+            if (content.allLastTitles) restoreLastTitles(content.allLastTitles);
+            if (content.tags) restoreTags(content.tags);
+            if (content.tasks) overwriteTasks(content.tasks);
+            if (content.indexed) overwriteIndex(Object.values(content.indexed));
+            if (content.notes) overwriteNotes(Object.values(content.notes));
+            
+            // Show success message
+            const $btn = $('.restore-all-btn');
+            $btn.text('Data restored successfully!');
+            setTimeout(() => {
+              $btn.text('Restore all from JSON file');
+            }, 1000);
+          } catch (error) {
+            console.error('Error parsing backup file:', error);
+            // Show error message
+            $('#ruleErrorModal').modal('show');
           }
         };
         reader.readAsText(selectedFile);
@@ -753,7 +758,6 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
         reader.readAsText(selectedFile);
       }
     });
-    // === New code starts here ===
 
     // Pane navigation setup for settings
     const paneMap = {
