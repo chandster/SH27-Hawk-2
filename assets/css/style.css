@@ -2970,3 +2970,217 @@ html.dark .settings-icon-text {
 .task-overdue {
 background-color:#FA5F55!important;
 }
+
+.form-control-color {
+    width: 100px;
+    height: 40px;
+    padding: 3px;
+    border-radius: 8px;
+    background: var(--panel-bg);
+    border: 1px solid rgba(230, 126, 34, 0.2);
+}
+
+.form-control-color::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.form-control-color::-webkit-color-swatch {
+    border: none;
+    border-radius: 6px;
+}
+
+.theme-color-options {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-around;
+}
+
+.theme-color-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-color-btn.active {
+    border-color: var(--text-color);
+    transform: scale(1.1);
+}
+
+.theme-color-btn:hover {
+    transform: scale(1.1);
+}
+
+.theme-color-container {
+    background: var(--panel-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--panel-box-shadow);
+}
+
+.theme-color-options {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.theme-color-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.theme-color-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+.theme-color-btn.active {
+    border-color: var(--text-color);
+    transform: translateY(-2px);
+}
+
+.theme-color-btn.active::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 24px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#resetThemeColor {
+    width: 100%;
+    padding: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--primary-color);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+#resetThemeColor:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.2);
+}
+
+@media (max-width: 768px) {
+    .theme-color-options {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .theme-color-btn {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+.theme-color-container {
+    background: var(--panel-bg);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: var(--panel-box-shadow);
+}
+
+.theme-color-categories h6 {
+    color: var(--pane-text-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 1.5rem 0 1rem;
+    opacity: 0.8;
+}
+
+.theme-color-categories h6:first-child {
+    margin-top: 0;
+}
+
+.theme-color-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.theme-color-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.theme-color-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.theme-color-btn.active {
+    border-color: var(--text-color);
+    transform: translateY(-2px);
+}
+
+.theme-color-btn.active::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 28px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+#resetThemeColor {
+    width: 100%;
+    padding: 1rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#resetThemeColor:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(230, 126, 34, 0.25);
+}
+
+@media (max-width: 768px) {
+    .theme-color-options {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .theme-color-btn {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .theme-color-categories h6 {
+        font-size: 0.85rem;
+        margin: 1.2rem 0 0.8rem;
+    }
+}
