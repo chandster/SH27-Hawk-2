@@ -585,24 +585,6 @@ input[type="checkbox"]:not(.selective-checkbox):not([role="switch"]):checked {
   font-size: 1.2rem;
 }
 
-.arrow_icon_button {
-	width: 8vw;
-	height: 8vw;
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.nt-body {
-	height: 100vh;
-	width: 100vw;
-	background-size: cover;
-	max-width: 100%;
-}
-
 .settings-body {
 	height: 100vh;
 	width: 100vw;
@@ -623,10 +605,6 @@ input[type="checkbox"]:not(.selective-checkbox):not([role="switch"]):checked {
 	align-items: center;
 }
 
-.icon-margin {
-	margin-right: 0.25em;
-}
-
 #addRuleForm,
 #editForm,
 #todoForm {
@@ -644,89 +622,8 @@ input[type="checkbox"]:not(.selective-checkbox):not([role="switch"]):checked {
 	margin-bottom: 15px;
 }
 
-#new-task-button {
-	width: 35px;
-	height:35px;
-	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-#editor {
-	width: 300px;
-	height: 300px;
-	float: left;
-}
-
-.custom-container {
-	width: 300%;
-	border-radius: 10px; 
-	background-color: #DDDDDD;
-}
-
-#add-note {
-	background-color: transparent;
-	border: 2px solid black;
-	border-radius: 10px;
-}
-
-#title {
-	background: white;
-	color: #C45500;
-}
-
-#notes-list {
-	overflow-y: auto;
-	max-height: 450px;
-	border-radius: 0;
-}
-
-.note-item:hover {
-	background-color: var(--note-item-hover-color); 
-}
-
-#contentDisplay {
-	background-color: transparent; 
-	overflow-x: auto;
-	margin-top: 2em;
-	height:500px;
-	width:100%;
-}
-
 .sidebar {
 	border-right: 2px solid #0000003d;
-}
-
-#my-notes-label {
-	font-size: 2.5rem;
-}
-
-.bold-text {
-	font-weight: bold;
-	border-bottom: 2px solid #0000003d;
-	padding-bottom: 0.5em;
-}
-
-.no-padding {
-	padding:0;
-}
-
-.note-item {
-	padding: 10px;
-	border-bottom: 2px solid #0000003d;
-	transition: background-color 0.3s;
-	font-size: 24px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.note-item-icon {
-	width: 40px; 
-	height: auto; 
-	margin-right: 10px; 
-}
-
-.note-item-title {
-	margin-right: 10px; 
 }
 
 .settings-title {
