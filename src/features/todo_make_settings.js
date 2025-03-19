@@ -645,48 +645,36 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
       $(`#${$entry.attr('id')}-pane`).removeClass('d-none');
     }
 
-    $('#jsonAllInput').on('change', (event) => {
+    $(document).on('change', '#jsonDataInput', (event) => {
       const selectedFile = event.target.files[0];
+
       if (selectedFile) {
         const reader = new FileReader();
         reader.onload = (e) => {
           try {
             const content = JSON.parse(e.target.result);
-            // Restore all data categories
-            if (content.allLastTitles) restoreLastTitles(content.allLastTitles);
-            if (content.tags) restoreTags(content.tags);
-            if (content.tasks) overwriteTasks(content.tasks);
-            if (content.indexed) overwriteIndex(Object.values(content.indexed));
-            if (content.notes) overwriteNotes(Object.values(content.notes));
             
+            // Restore both tasks and notes if they exist
+            if (content.tasks) {
+              overwriteTasks(content.tasks);
+            }
+            if (content.notes) {
+              overwriteNotes(Object.values(content.notes));
+            }
+            if (content.tags) {
+              restoreTags(content.tags);
+            }
+
             // Show success message
-            const $btn = $('.restore-all-btn');
+            const $btn = $('.data-restore-btn');
             $btn.text('Data restored successfully!');
             setTimeout(() => {
-              $btn.text('Restore all from JSON file');
+              $btn.text('Upload data to restore tasks and notes');
             }, 1000);
           } catch (error) {
             console.error('Error parsing backup file:', error);
-            // Show error message
             $('#ruleErrorModal').modal('show');
           }
-        };
-        reader.readAsText(selectedFile);
-      }
-    });
-
-    $(document).on('change', '#jsonInput', (event) => {
-      const selectedFile = event.target.files[0];
-
-      if (selectedFile) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const content = JSON.parse(e.target.result);
-          const { tasks } = content;
-          if (Object.prototype.hasOwnProperty.call(content, 'tags')) {
-            restoreTags(content.tags);
-          }
-          overwriteTasks(tasks);
         };
         reader.readAsText(selectedFile);
       }
