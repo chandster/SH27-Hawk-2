@@ -231,16 +231,8 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
         });
     }
 
-    $('#todo-list-button').on('click', () => {
-      loadContent('todo_list.html');
-    });
-
     $('#manage-settings').on('click', () => {
       loadContent('settings.html');
-    });
-
-    $('#notebook').on('click', () => {
-      loadContent('add_note.html');
     });
 
     chrome.runtime.onMessage.addListener((message) => {

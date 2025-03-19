@@ -134,26 +134,8 @@ ul {
 	list-style: none;
 }
 
-#main-container {
-	padding: 5px;
-	min-height: 550px;
-	width: 500px;
-	box-shadow: 0 0 5px #DDDDDD;
-	margin: 5px;
-	border-radius: 10px; 
-}
-
-#title {
-	background-color: var(--search-bar-color) !important;
-	color: var(--pane-text-color) !important;
-	text-align: left;
-	padding: 10px;
-	border-radius: 18px;
-	position: relative;
-}
-
-.button-div, #add-todo-btn, .primary-outline-btn, #add-note-button, .add-task, .add-task-modal, .selective-checkbox, #appearance,
-#notebook,#backup,#about, #manage-settings, #todo-list-button, .note-item, .dropdown-item {
+#add-note-button, .selective-checkbox, #appearance, 
+#backup,#about, #manage-settings, .note-item, .dropdown-item {
 	cursor: pointer;
 }
 
@@ -631,15 +613,6 @@ input::placeholder {
 	border-radius: 5px;
 }
 
-.add-task {
-	background-color: #C45500;
-	color: #fff;
-	border: none;
-	padding: 10px 15px;
-	font-size: 1em;
-	border-radius: 3px;
-}
-
 .modal {
 	background-color: rgba(221, 221, 221, 0.5); 
 	display: none;
@@ -664,15 +637,6 @@ input::placeholder {
 	box-sizing: border-box;
 	margin-bottom: 10px;
 	border-radius: 5px;
-}
-
-.add-task-modal {
-	background-color: #C45500;
-	color: #fff;
-	border: none;
-	padding: 10px 15px;
-	font-size: 1em;
-	border-radius: 3px;
 }
 
 .index-list {
