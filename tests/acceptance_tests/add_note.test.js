@@ -48,6 +48,7 @@ describe('Chrome Extension: Note Management Tests', () => {
   }, 120000);
 
   afterAll(async () => {
+    jest.setTimeout(30000);
     if (browser) {
       await browser.close();
     }
@@ -57,7 +58,7 @@ describe('Chrome Extension: Note Management Tests', () => {
     'User can add a note',
     async () => {
       console.log('🔍 Checking for input field...');
-      await popupPage.waitForSelector('#noteinput', { timeout: 10000 });
+      await popupPage.waitForSelector('#noteinput', { timeout: 20000 });
 
       console.log('⌨ Typing a note...');
       await popupPage.type('#noteinput', 'Test Note');

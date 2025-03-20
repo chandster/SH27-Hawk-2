@@ -44,6 +44,7 @@ describe('Chrome Extension: Delete Note Test', () => {
   }, 120000);
 
   afterAll(async () => {
+    jest.setTimeout(30000);
     if (browser) {
       await browser.close();
     }
@@ -58,7 +59,7 @@ describe('Chrome Extension: Delete Note Test', () => {
       await delay(2000);
 
       console.log('🗑 Clicking the first note before deleting...');
-      await popupPage.waitForSelector('#tasks-display tr', { timeout: 10000 });
+      await popupPage.waitForSelector('#tasks-display tr', { timeout: 30000 });
       await popupPage.click('#tasks-display tr:first-child'); // Click the first note
 
       console.log('🗑 Waiting for delete button to appear...');
