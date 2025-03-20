@@ -55,7 +55,6 @@ describe('Chrome Extension: Indexing Storage Test', () => {
   }, 120000);
 
   test('Pages are correctly indexed and stored', async () => {
-
     const amazonPage = await browser.newPage();
     console.log('🌐 Visiting Amazon page to trigger indexing...');
     await amazonPage.goto('https://www.amazon.co.uk', { waitUntil: 'domcontentloaded' });
