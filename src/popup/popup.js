@@ -1,3 +1,5 @@
+import { adjustColorBrightness } from '../features/todo_make_settings.js';
+
 let currentURL = '';
 
 function checkSitesList() {

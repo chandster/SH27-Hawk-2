@@ -27,7 +27,7 @@ function loadCustomBackground() {
     }
   });
 }
-function adjustColorBrightness(color, percent) {
+export function adjustColorBrightness(color, percent) {
   const num = parseInt(color.replace('#', ''), 16);
   const amt = Math.round(2.55 * percent);
 
