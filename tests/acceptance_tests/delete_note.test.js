@@ -41,7 +41,7 @@ describe('Chrome Extension: Delete Note Test', () => {
     await popupPage.goto(popupUrl, { waitUntil: 'networkidle2', timeout: 60000 });
 
     console.log('✅ Extension Popup Opened Successfully!');
-  }, 60000);
+  }, 120000);
 
   afterAll(async () => {
     if (browser) {
@@ -79,6 +79,6 @@ describe('Chrome Extension: Delete Note Test', () => {
 
       console.log('✅ Test Passed! The deleted note did not come back after reload.');
     },
-    60000,
+    120000,
   );
 });

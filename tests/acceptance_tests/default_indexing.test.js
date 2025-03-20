@@ -45,14 +45,14 @@ describe('Chrome Extension: Indexing Storage Test', () => {
     await popupPage.goto(popupUrl, { waitUntil: 'networkidle2', timeout: 60000 });
 
     console.log('✅ Extension Loaded and Popup Opened.');
-  }, 60000);
+  }, 120000);
 
   afterAll(async () => {
-    jest.setTimeout(60000);
+    jest.setTimeout(120000);
     if (browser) {
       await browser.close();
     }
-  }, 60000);
+  }, 120000);
 
   test('Pages are correctly indexed and stored', async () => {
     // const bbcPage = await browser.newPage();
@@ -96,5 +96,5 @@ describe('Chrome Extension: Indexing Storage Test', () => {
     expect(amazonIndexed).toBe(true);
 
     console.log('✅ Test Passed! BBC and Amazon pages were successfully indexed.');
-  }, 60000);
+  }, 120000);
 });

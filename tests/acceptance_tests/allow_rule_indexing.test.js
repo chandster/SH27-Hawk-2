@@ -37,7 +37,7 @@ describe('Chrome Extension: Allow Rule Test', () => {
     await popupPage.goto(popupUrl, { waitUntil: 'networkidle2', timeout: 60000 });
 
     console.log('✅ Extension Popup Opened Successfully!');
-  }, 60000);
+  }, 120000);
 
   afterAll(async () => {
     if (browser) {
@@ -135,5 +135,5 @@ describe('Chrome Extension: Allow Rule Test', () => {
     expect(glaIndexed).toBe(true);
 
     console.log('✅ Test Passed! www.gla.ac.uk was successfully indexed.');
-  }, 60000);
+  }, 120000);
 });

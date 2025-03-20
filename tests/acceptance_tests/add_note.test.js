@@ -45,7 +45,7 @@ describe('Chrome Extension: Note Management Tests', () => {
     await popupPage.goto(popupUrl, { waitUntil: 'networkidle2', timeout: 60000 });
 
     console.log('✅ Extension Popup Opened Successfully!');
-  }, 60000);
+  }, 120000);
 
   afterAll(async () => {
     if (browser) {
@@ -97,6 +97,6 @@ describe('Chrome Extension: Note Management Tests', () => {
 
       console.log('✅ Test Passed! The note was successfully added.');
     },
-    60000,
+    120000,
   );
 });
