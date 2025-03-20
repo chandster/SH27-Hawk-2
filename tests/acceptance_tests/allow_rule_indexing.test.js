@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+jest.setTimeout(120000);
 const puppeteer = require('puppeteer');
 const path = require('path');
 

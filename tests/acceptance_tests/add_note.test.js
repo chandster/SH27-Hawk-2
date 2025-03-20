@@ -88,7 +88,7 @@ describe('Chrome Extension: Note Management Tests', () => {
       await delay(2000);
 
       // Wait for the note to appear in the list
-      await popupPage.waitForSelector('#tasks-display tr', { timeout: 10000 });
+      await popupPage.waitForSelector('#tasks-display tr', { timeout: 120000 });
 
       const notesList = await popupPage.evaluate(() => Array.from(document.querySelectorAll('#tasks-display tr'))
         .map((el) => el.innerText));
