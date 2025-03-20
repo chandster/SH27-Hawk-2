@@ -315,9 +315,9 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'themeColorChanged') {
     // Broadcast theme change to all extension pages
-    chrome.runtime.sendMessage({ 
-      type: 'applyTheme', 
-      color: message.color 
+    chrome.runtime.sendMessage({
+      type: 'applyTheme',
+      color: message.color,
     });
   }
 });

@@ -280,26 +280,26 @@ $(document).ready(() => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'applyTheme') {
-      document.documentElement.style.setProperty('--primary-color', message.color);
-      document.documentElement.style.setProperty('--accent-color', message.color);
-      document.documentElement.style.setProperty('--primary-hover', adjustColorBrightness(message.color, -10));
-      
-      const alpha = '0.1';
-      document.documentElement.style.setProperty('--ui-pane-color', `${message.color}${alpha}`);
-      document.documentElement.style.setProperty('--settings-section-color', `${message.color}${alpha}`);
+    document.documentElement.style.setProperty('--primary-color', message.color);
+    document.documentElement.style.setProperty('--accent-color', message.color);
+    document.documentElement.style.setProperty('--primary-hover', adjustColorBrightness(message.color, -10));
+
+    const alpha = '0.1';
+    document.documentElement.style.setProperty('--ui-pane-color', `${message.color}${alpha}`);
+    document.documentElement.style.setProperty('--settings-section-color', `${message.color}${alpha}`);
   }
 });
 
 // Load theme on page load
 chrome.storage.local.get('themeColor', (result) => {
   if (result.themeColor) {
-      document.documentElement.style.setProperty('--primary-color', result.themeColor);
-      document.documentElement.style.setProperty('--accent-color', result.themeColor);
-      document.documentElement.style.setProperty('--primary-hover', adjustColorBrightness(result.themeColor, -10));
-      
-      const alpha = '0.1';
-      document.documentElement.style.setProperty('--ui-pane-color', `${result.themeColor}${alpha}`);
-      document.documentElement.style.setProperty('--settings-section-color', `${result.themeColor}${alpha}`);
+    document.documentElement.style.setProperty('--primary-color', result.themeColor);
+    document.documentElement.style.setProperty('--accent-color', result.themeColor);
+    document.documentElement.style.setProperty('--primary-hover', adjustColorBrightness(result.themeColor, -10));
+
+    const alpha = '0.1';
+    document.documentElement.style.setProperty('--ui-pane-color', `${result.themeColor}${alpha}`);
+    document.documentElement.style.setProperty('--settings-section-color', `${result.themeColor}${alpha}`);
   }
 });
 
