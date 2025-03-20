@@ -55,9 +55,6 @@ describe('Chrome Extension: Indexing Storage Test', () => {
   }, 120000);
 
   test('Pages are correctly indexed and stored', async () => {
-    // const bbcPage = await browser.newPage();
-    // console.log('🌐 Visiting BBC page to trigger indexing...');
-    // await bbcPage.goto('https://www.bbc.co.uk/news', { waitUntil: 'domcontentloaded' });
 
     const amazonPage = await browser.newPage();
     console.log('🌐 Visiting Amazon page to trigger indexing...');
@@ -74,25 +71,10 @@ describe('Chrome Extension: Indexing Storage Test', () => {
       });
     }));
 
-    // console.log('📝 Parsed localSearchIndex:', storageData);
-
-    // const fullStorage = await popupPage.evaluate(() => new Promise((resolve) => {
-    //   chrome.storage.local.get(null, (result) => {
-    //     resolve(result);
-    //   });
-    // }));
-
-    // console.log('🗄️ Full chrome.storage.local:', JSON.stringify(fullStorage, null, 2));
-
     const documentIds = storageData.documentIds || {};
     const allUrls = Object.values(documentIds);
-
-    // console.log('🌐 Indexed URLs:', allUrls);
-
-    // const bbcIndexed = allUrls.some(url => url.includes('bbc.co.uk'));
     const amazonIndexed = allUrls.some((url) => url.includes('amazon.co.uk'));
 
-    // expect(bbcIndexed).toBe(true);
     expect(amazonIndexed).toBe(true);
 
     console.log('✅ Test Passed! BBC and Amazon pages were successfully indexed.');
