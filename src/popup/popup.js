@@ -1,7 +1,22 @@
-import { adjustColorBrightness } from '../features/todo_make_settings.js';
+// import { adjustColorBrightness } from '../features/todo_make_settings.js';
 
 let currentURL = '';
 
+function adjustColorBrightness(color, percent) {
+  const num = parseInt(color.replace('#', ''), 16);
+  const amt = Math.round(2.55 * percent);
+
+  const R = Math.min(255, Math.max(0, Math.floor(num / 65536) + amt));
+  const G = Math.min(255, Math.max(0, Math.floor((num / 256) % 256) + amt));
+  const B = Math.min(255, Math.max(0, (num % 256) + amt));
+
+  // Convert back to hex with padding
+  const rHex = R.toString(16).padStart(2, '0');
+  const gHex = G.toString(16).padStart(2, '0');
+  const bHex = B.toString(16).padStart(2, '0');
+
+  return `#${rHex}${gHex}${bHex}`.toUpperCase();
+}
 function checkSitesList() {
   return new Promise((resolve) => {
     chrome.storage.local.get(['allowedSites'], (result) => {
