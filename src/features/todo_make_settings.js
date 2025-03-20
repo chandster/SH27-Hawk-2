@@ -28,16 +28,20 @@ function loadCustomBackground() {
   });
 }
 function adjustColorBrightness(color, percent) {
-  let num = parseInt(color.replace('#', ''), 16);
+  const num = parseInt(color.replace('#', ''), 16);
   const amt = Math.round(2.55 * percent);
 
-  let R = Math.min(255, Math.max(0, Math.floor(num / 65536) + amt));
-  let G = Math.min(255, Math.max(0, Math.floor(num / 256) % 256 + amt));
-  let B = Math.min(255, Math.max(0, num % 256 + amt));
+  const R = Math.min(255, Math.max(0, Math.floor(num / 65536) + amt));
+  const G = Math.min(255, Math.max(0, Math.floor((num / 256) % 256) + amt));
+  const B = Math.min(255, Math.max(0, (num % 256) + amt));
 
-  return `#${((1 << 24) | (R << 16) | (G << 8) | B).toString(16).slice(1).toUpperCase()}`;
+  // Convert back to hex with padding
+  const rHex = R.toString(16).padStart(2, '0');
+  const gHex = G.toString(16).padStart(2, '0');
+  const bHex = B.toString(16).padStart(2, '0');
+
+  return `#${rHex}${gHex}${bHex}`.toUpperCase();
 }
-
 
 function loadAppearance(usepreference) {
   $('.settings-container').addClass('changing');
