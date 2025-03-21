@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Hawk 2 - Page Indexer",
   "description": "Extension combining to-do list and page indexer into one.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "omnibox": { "keyword": "i" },
   
   "content_security_policy": {
@@ -47,8 +47,7 @@
   "content_scripts": [
     {
       "matches": [
-        "*://*/hello.html",
-        "*://*/todo_list.html"
+        "*://*/hello.html"
       ],
       "js": [
         "src/popup/popup.js",

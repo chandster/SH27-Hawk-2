@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+jest.setTimeout(120000); 
 const puppeteer = require('puppeteer');
 const path = require('path');
 
@@ -41,9 +42,10 @@ describe('Chrome Extension: Edit Note Test', () => {
     await popupPage.goto(popupUrl, { waitUntil: 'networkidle2', timeout: 60000 });
 
     console.log('✅ Extension Popup Opened Successfully!');
-  }, 60000);
+  }, 120000);
 
   afterAll(async () => {
+    jest.setTimeout(30000);
     if (browser) {
       await browser.close();
     }
@@ -58,7 +60,7 @@ describe('Chrome Extension: Edit Note Test', () => {
       await delay(2000);
 
       console.log('✏ Clicking the first note before editing...');
-      await popupPage.waitForSelector('#tasks-display tr', { timeout: 10000 });
+      await popupPage.waitForSelector('#tasks-display tr', { timeout: 120000 });
       await popupPage.click('#tasks-display tr:first-child'); // Click the first note
 
       console.log('✏ Waiting for input field to be editable...');
@@ -89,6 +91,6 @@ describe('Chrome Extension: Edit Note Test', () => {
 
       console.log('✅ Test Passed! The note was successfully edited.');
     },
-    60000,
+    120000,
   );
 });

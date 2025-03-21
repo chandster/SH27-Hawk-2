@@ -27,6 +27,21 @@ function loadCustomBackground() {
     }
   });
 }
+function adjustColorBrightness(color, percent) {
+  const num = parseInt(color.replace('#', ''), 16);
+  const amt = Math.round(2.55 * percent);
+
+  const R = Math.min(255, Math.max(0, Math.floor(num / 65536) + amt));
+  const G = Math.min(255, Math.max(0, Math.floor((num / 256) % 256) + amt));
+  const B = Math.min(255, Math.max(0, (num % 256) + amt));
+
+  // Convert back to hex with padding
+  const rHex = R.toString(16).padStart(2, '0');
+  const gHex = G.toString(16).padStart(2, '0');
+  const bHex = B.toString(16).padStart(2, '0');
+
+  return `#${rHex}${gHex}${bHex}`.toUpperCase();
+}
 
 function loadAppearance(usepreference) {
   $('.settings-container').addClass('changing');
@@ -51,6 +66,16 @@ function loadAppearance(usepreference) {
   setTimeout(() => {
     $('.settings-container').removeClass('changing');
   }, 500);
+  chrome.storage.local.get('themeColor', (result) => {
+    if (result.themeColor) {
+      document.documentElement.style.setProperty('--primary-color', result.themeColor);
+      document.documentElement.style.setProperty('--accent-color', result.themeColor);
+      document.documentElement.style.setProperty('--primary-hover', adjustColorBrightness(result.themeColor, -10));
+      const alpha = '0.1';
+      document.documentElement.style.setProperty('--ui-pane-color', `${result.themeColor}${alpha}`);
+      document.documentElement.style.setProperty('--settings-section-color', `${result.themeColor}${alpha}`);
+    }
+  });
 }
 
 const noneMsg = `
@@ -850,5 +875,74 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
     }
 
     handleSidebarNavigation();
+
+    // Theme color functionality
+    function updateThemeColor(color) {
+      document.documentElement.style.setProperty('--primary-color', color);
+      document.documentElement.style.setProperty('--accent-color', color);
+      document.documentElement.style.setProperty('--primary-hover', adjustColorBrightness(color, -10));
+
+      const alpha = '0.1';
+      document.documentElement.style.setProperty('--ui-pane-color', `${color}${alpha}`);
+      document.documentElement.style.setProperty('--settings-section-color', `${color}${alpha}`);
+
+      // Save to storage and broadcast change
+      chrome.storage.local.set({ themeColor: color }, () => {
+        chrome.runtime.sendMessage({ type: 'themeColorChanged', color });
+      });
+
+      // Update active state of buttons
+      $('.theme-color-btn').removeClass('active');
+      $(`.theme-color-btn[data-color="${color}"]`).addClass('active');
+    }
+
+    const colorPicker = $('#themeColorPicker');
+    const defaultColor = '#e65100';
+
+    // Load saved color
+    chrome.storage.local.get('themeColor', (result) => {
+      if (result.themeColor) {
+        colorPicker.val(result.themeColor);
+        updateThemeColor(result.themeColor);
+      }
+    });
+
+    // Handle color changes
+    colorPicker.on('input', (event) => {
+      const newColor = event.target.value;
+      updateThemeColor(newColor);
+    });
+
+    colorPicker.on('change', (event) => {
+      const newColor = event.target.value;
+      chrome.storage.local.set({ themeColor: newColor }, () => {
+        chrome.runtime.sendMessage({ type: 'themeColorChanged', color: newColor });
+      });
+    });
+
+    // Reset color to default
+    $('#resetThemeColor').on('click', () => {
+      colorPicker.val(defaultColor);
+      chrome.storage.local.set({ themeColor: defaultColor }, () => {
+        updateThemeColor(defaultColor);
+        chrome.runtime.sendMessage({ type: 'themeColorChanged', color: defaultColor });
+      });
+    });
+
+    // Theme color button handlers
+    $(document).on('click', '.theme-color-btn', function () {
+      const newColor = $(this).data('color');
+      updateThemeColor(newColor);
+    });
+
+    // Load saved theme color
+    chrome.storage.local.get('themeColor', (result) => {
+      if (result.themeColor) {
+        updateThemeColor(result.themeColor);
+      } else {
+        // Set default color
+        updateThemeColor('#e65100');
+      }
+    });
   });
 }

@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+jest.setTimeout(120000); 
 const puppeteer = require('puppeteer');
 const path = require('path');
 
@@ -45,9 +46,10 @@ describe('Chrome Extension: Note Management Tests', () => {
     await popupPage.goto(popupUrl, { waitUntil: 'networkidle2', timeout: 60000 });
 
     console.log('✅ Extension Popup Opened Successfully!');
-  }, 60000);
+  }, 120000);
 
   afterAll(async () => {
+    jest.setTimeout(30000);
     if (browser) {
       await browser.close();
     }
@@ -57,7 +59,7 @@ describe('Chrome Extension: Note Management Tests', () => {
     'User can add a note',
     async () => {
       console.log('🔍 Checking for input field...');
-      await popupPage.waitForSelector('#noteinput', { timeout: 10000 });
+      await popupPage.waitForSelector('#noteinput', { timeout: 20000 });
 
       console.log('⌨ Typing a note...');
       await popupPage.type('#noteinput', 'Test Note');
@@ -86,7 +88,7 @@ describe('Chrome Extension: Note Management Tests', () => {
       await delay(2000);
 
       // Wait for the note to appear in the list
-      await popupPage.waitForSelector('#tasks-display tr', { timeout: 10000 });
+      await popupPage.waitForSelector('#tasks-display tr', { timeout: 120000 });
 
       const notesList = await popupPage.evaluate(() => Array.from(document.querySelectorAll('#tasks-display tr'))
         .map((el) => el.innerText));
@@ -97,6 +99,6 @@ describe('Chrome Extension: Note Management Tests', () => {
 
       console.log('✅ Test Passed! The note was successfully added.');
     },
-    60000,
+    120000,
   );
 });

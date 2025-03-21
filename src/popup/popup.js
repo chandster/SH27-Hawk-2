@@ -1,5 +1,22 @@
+// import { adjustColorBrightness } from '../features/todo_make_settings.js';
+
 let currentURL = '';
 
+function adjustColorBrightness(color, percent) {
+  const num = parseInt(color.replace('#', ''), 16);
+  const amt = Math.round(2.55 * percent);
+
+  const R = Math.min(255, Math.max(0, Math.floor(num / 65536) + amt));
+  const G = Math.min(255, Math.max(0, Math.floor((num / 256) % 256) + amt));
+  const B = Math.min(255, Math.max(0, (num % 256) + amt));
+
+  // Convert back to hex with padding
+  const rHex = R.toString(16).padStart(2, '0');
+  const gHex = G.toString(16).padStart(2, '0');
+  const bHex = B.toString(16).padStart(2, '0');
+
+  return `#${rHex}${gHex}${bHex}`.toUpperCase();
+}
 function checkSitesList() {
   return new Promise((resolve) => {
     chrome.storage.local.get(['allowedSites'], (result) => {
@@ -231,16 +248,8 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
         });
     }
 
-    $('#todo-list-button').on('click', () => {
-      loadContent('todo_list.html');
-    });
-
     $('#manage-settings').on('click', () => {
       loadContent('settings.html');
-    });
-
-    $('#notebook').on('click', () => {
-      loadContent('add_note.html');
     });
 
     chrome.runtime.onMessage.addListener((message) => {
@@ -284,6 +293,31 @@ $(document).ready(() => {
     // Hide date picker after selection
     $('#date-picker-wrapper').hide();
   });
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'applyTheme') {
+    document.documentElement.style.setProperty('--primary-color', message.color);
+    document.documentElement.style.setProperty('--accent-color', message.color);
+    document.documentElement.style.setProperty('--primary-hover', adjustColorBrightness(message.color, -10));
+
+    const alpha = '0.1';
+    document.documentElement.style.setProperty('--ui-pane-color', `${message.color}${alpha}`);
+    document.documentElement.style.setProperty('--settings-section-color', `${message.color}${alpha}`);
+  }
+});
+
+// Load theme on page load
+chrome.storage.local.get('themeColor', (result) => {
+  if (result.themeColor) {
+    document.documentElement.style.setProperty('--primary-color', result.themeColor);
+    document.documentElement.style.setProperty('--accent-color', result.themeColor);
+    document.documentElement.style.setProperty('--primary-hover', adjustColorBrightness(result.themeColor, -10));
+
+    const alpha = '0.1';
+    document.documentElement.style.setProperty('--ui-pane-color', `${result.themeColor}${alpha}`);
+    document.documentElement.style.setProperty('--settings-section-color', `${result.themeColor}${alpha}`);
+  }
 });
 
 // Listen for indexing status messages
