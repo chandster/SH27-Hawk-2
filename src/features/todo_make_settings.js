@@ -84,7 +84,7 @@ function exportAll() {
   chrome.storage.local.get(null, (data) => {
     // Create a clean copy of the data
     const exportData = { ...data };
-    
+
     const blob = new Blob([JSON.stringify(exportData, null, 2)], {
       type: 'application/json',
     });
@@ -92,7 +92,7 @@ function exportAll() {
     downloadLink.href = URL.createObjectURL(blob);
     downloadLink.download = 'hawk_backup_data.json';
     downloadLink.click();
-    
+
     URL.revokeObjectURL(downloadLink.href);
   });
 }
@@ -312,7 +312,7 @@ function showCombinedData(tasksArray, notesArray) {
   // Show tasks first
   if (tasksArray && tasksArray.length > 0) {
     $dataList.append('<h5>Tasks</h5>');
-    
+
     tasksArray.forEach((task) => {
       if (task && task.text) {
         const taskItem = $(`
@@ -325,11 +325,11 @@ function showCombinedData(tasksArray, notesArray) {
       }
     });
   }
-  
+
   // Then show notes
   if (notesArray && notesArray.length > 0) {
     $dataList.append('<h5 class="mt-3">Notes</h5>');
-    
+
     notesArray.forEach((note) => {
       if (note && note.title) {
         const noteItem = $(`
@@ -342,7 +342,7 @@ function showCombinedData(tasksArray, notesArray) {
       }
     });
   }
-  
+
   if ((!tasksArray || tasksArray.length === 0) && (!notesArray || notesArray.length === 0)) {
     $dataList.append('<p>No tasks or notes found in the backup file.</p>');
   }
@@ -351,26 +351,26 @@ function showCombinedData(tasksArray, notesArray) {
 function restoreSelectedData() {
   // Get selected tasks
   const selectedTaskIds = [];
-  $('.task-checkbox:checked').each(function() {
+  $('.task-checkbox:checked').each(function () {
     selectedTaskIds.push($(this).data('id'));
   });
-  
+
   // Get selected notes
   const selectedNoteIds = [];
-  $('.note-checkbox:checked').each(function() {
+  $('.note-checkbox:checked').each(function () {
     selectedNoteIds.push($(this).data('id'));
   });
-  
+
   // Restore selected tasks and notes
   if (selectedTaskIds.length > 0 && curTasks) {
     const tasksToRestore = {};
     selectedTaskIds.forEach((id) => {
-      const task = curTasks.find(t => t.id === id);
+      const task = curTasks.find((t) => t.id === id);
       if (task) {
         tasksToRestore[id] = task;
       }
     });
-    
+
     if (Object.keys(tasksToRestore).length > 0) {
       chrome.storage.local.get(['tasks'], (result) => {
         const currentTasks = result.tasks || {};
@@ -379,17 +379,17 @@ function restoreSelectedData() {
       });
     }
   }
-  
+
   // Restore selected notes
   if (selectedNoteIds.length > 0 && curNotes) {
     const notesToRestore = {};
     selectedNoteIds.forEach((id) => {
-      const note = curNotes.find(n => n.id === id);
+      const note = curNotes.find((n) => n.id === id);
       if (note) {
         notesToRestore[id] = note;
       }
     });
-    
+
     if (Object.keys(notesToRestore).length > 0) {
       chrome.storage.local.get(['notes'], (result) => {
         const currentNotes = result.notes || {};
@@ -618,17 +618,17 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
 
     $(document).on('click', '.btn.btn-secondary.restore-selection-btn', (event) => {
       const $restoreBtn = $(event.currentTarget);
-      
+
       // Restore selected data
       if (curTags) {
         restoreTags(curTags);
       }
-      
+
       restoreSelectedData();
-      
+
       // Handle index entries
       restoreSelectedIndexEntries();
-      
+
       // Show success message
       $restoreBtn.text('Restored selected data!');
       setTimeout(() => {
@@ -688,7 +688,7 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
         reader.onload = (e) => {
           try {
             const content = JSON.parse(e.target.result);
-            
+
             // Restore both tasks and notes if they exist
             if (content.tasks) {
               overwriteTasks(content.tasks);
@@ -723,39 +723,39 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
         reader.onload = (e) => {
           try {
             const content = JSON.parse(e.target.result);
-            
+
             // Store the data for later use when selections are made
             if (content.tags) {
               curTags = content.tags;
             }
-            
+
             // Handle tasks
             let tasksArray = [];
             if (content.tasks) {
               tasksArray = Object.values(content.tasks);
               curTasks = tasksArray;
             }
-            
+
             // Handle notes
             let notesArray = [];
             if (content.notes) {
               notesArray = Object.values(content.notes);
               curNotes = notesArray;
             }
-            
+
             // Handle indexed items
             if (content.indexed) {
               const indexArray = Object.values(content.indexed);
               curIndexEntries = indexArray;
               showIndexEntries(indexArray);
             }
-            
+
             // Show combined tasks and notes
             showCombinedData(tasksArray, notesArray);
-            
+
             // Show the selection container
             $('#backup-select-col').removeClass('d-none');
-            
+
             // Update button text to indicate success
             $('.import-selection-btn').text('Data imported for selection');
             setTimeout(() => {
