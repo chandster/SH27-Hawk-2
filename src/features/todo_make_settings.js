@@ -441,6 +441,37 @@ function restoreSelectedIndexEntries() {
   }
 }
 
+function restoreAllFromJson(content) {
+  if (content.tasks) {
+    overwriteTasks(content.tasks);
+  }
+  if (content.notes) {
+    overwriteNotes(Object.values(content.notes));
+  }
+  if (content.tags) {
+    restoreTags(content.tags);
+  }
+  if (content.indexed) {
+    const indexArray = Object.values(content.indexed);
+    overwriteIndex(indexArray);
+  }
+
+  // ✅ Restore allow rule lists
+  if (content.allowedSites) {
+    chrome.storage.local.set({ allowedSites: content.allowedSites }, retrieveSitesList);
+  }
+  if (content.allowedURLs) {
+    chrome.storage.local.set({ allowedURLs: content.allowedURLs }, retrieveUrlsList);
+  }
+  if (content.allowedRegex) {
+    chrome.storage.local.set({ allowedRegex: content.allowedRegex }, retrieveRegexList);
+  }
+  if (content.allowedStringMatches) {
+    chrome.storage.local.set({ allowedStringMatches: content.allowedStringMatches }, retrieveStringMatchesList);
+  }
+}
+
+
 if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
   $(() => {
     hideLists();
@@ -705,6 +736,30 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
       $(`#${$entry.attr('id')}-pane`).removeClass('d-none');
     }
 
+    $(document).on('change', '#jsonAllInput', (event) => {
+      const selectedFile = event.target.files[0];
+    
+      if (selectedFile) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const content = JSON.parse(e.target.result);
+            restoreAllFromJson(content);
+    
+            const $btn = $('.restore-all-btn');
+            $btn.text('All data restored!');
+            setTimeout(() => {
+              $btn.text('Restore all from JSON file');
+            }, 1000);
+          } catch (error) {
+            console.error('Error parsing full restore file:', error);
+            $('#ruleErrorModal').modal('show');
+          }
+        };
+        reader.readAsText(selectedFile);
+      }
+    });
+    
     $(document).on('change', '#jsonDataInput', (event) => {
       const selectedFile = event.target.files[0];
 
