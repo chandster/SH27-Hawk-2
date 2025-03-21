@@ -276,42 +276,6 @@ function deleteRule(ruleLoc, rule) {
   });
 }
 
-function showNotes(notes) {
-  const selectiveList = $('#notes-selection-list');
-  selectiveList.empty();
-
-  $.each(notes, (key, value) => {
-    const title = `Title: ${value.title}`;
-    const constrainedContent = constrainStringLength(value.content, maxStringLength);
-    const content = `Content: ${constrainedContent}`;
-    selectiveList.append(`
-      <div class="row zero-margin zero-padding align-items-center mb-2">
-        <input class="d-block backup-checkbox" forNoteId="${key}" type="checkbox"> ${title} <br> ${content}
-      </div>
-    `);
-  });
-  curNotes = notes;
-}
-
-function showTasks(tasks) {
-  const selectiveList = $('#tasks-selection-list');
-  selectiveList.empty();
-
-  $.each(tasks, (key, value) => {
-    const title = `Title: ${value.title}`;
-    const desc = `Description: ${value.description}`;
-    const dueDate = new Date(value.due);
-    const parts = dueDate.toLocaleString().split(',');
-    const due = `Due: ${parts[0]}, at${parts[1]}`;
-    selectiveList.append(`
-      <div class="row zero-margin zero-padding align-items-center mb-2">
-        <input class="d-block backup-checkbox" forTask="${key}" type="checkbox"> ${title} <br> ${desc} <br> ${due}
-      </div>
-    `);
-  });
-  curTasks = tasks;
-}
-
 function showIndexEntries(indexEntries) {
   const selectiveList = $('#index-selection-list');
   selectiveList.empty();
@@ -341,33 +305,98 @@ function overwriteNotes(notesArray) {
   });
 }
 
-function restoreSelectedTasks() {
-  if (curTasks) {
-    const toRestore = [];
-    const selectiveList = $('#tasks-selection-list');
-    selectiveList.find('.backup-checkbox').each(function _() {
-      const elt = $(this);
-      if (elt.is(':checked')) {
-        const key = elt.attr('forTask');
-        toRestore.push({ ...curTasks[key] });
+function showCombinedData(tasksArray, notesArray) {
+  const $dataList = $('#data-selection-list');
+  $dataList.empty();
+
+  // Show tasks first
+  if (tasksArray && tasksArray.length > 0) {
+    $dataList.append('<h5>Tasks</h5>');
+    
+    tasksArray.forEach((task) => {
+      if (task && task.text) {
+        const taskItem = $(`
+          <div class="selectable-item">
+            <input type="checkbox" id="task-${task.id}" class="selection-checkbox task-checkbox" data-id="${task.id}">
+            <label for="task-${task.id}" class="selection-label">${task.text.substring(0, maxStringLength)}</label>
+          </div>
+        `);
+        $dataList.append(taskItem);
       }
     });
-    overwriteTasks(toRestore);
+  }
+  
+  // Then show notes
+  if (notesArray && notesArray.length > 0) {
+    $dataList.append('<h5 class="mt-3">Notes</h5>');
+    
+    notesArray.forEach((note) => {
+      if (note && note.title) {
+        const noteItem = $(`
+          <div class="selectable-item">
+            <input type="checkbox" id="note-${note.id}" class="selection-checkbox note-checkbox" data-id="${note.id}">
+            <label for="note-${note.id}" class="selection-label">${note.title.substring(0, maxStringLength)}</label>
+          </div>
+        `);
+        $dataList.append(noteItem);
+      }
+    });
+  }
+  
+  if ((!tasksArray || tasksArray.length === 0) && (!notesArray || notesArray.length === 0)) {
+    $dataList.append('<p>No tasks or notes found in the backup file.</p>');
   }
 }
 
-function restoreSelectedNotes() {
-  if (curNotes) {
-    const toRestore = [];
-    const selectiveList = $('#notes-selection-list');
-    selectiveList.find('.backup-checkbox').each(function _() {
-      const elt = $(this);
-      if (elt.is(':checked')) {
-        const key = elt.attr('forNoteId');
-        toRestore.push({ ...curNotes[key] });
+function restoreSelectedData() {
+  // Get selected tasks
+  const selectedTaskIds = [];
+  $('.task-checkbox:checked').each(function() {
+    selectedTaskIds.push($(this).data('id'));
+  });
+  
+  // Get selected notes
+  const selectedNoteIds = [];
+  $('.note-checkbox:checked').each(function() {
+    selectedNoteIds.push($(this).data('id'));
+  });
+  
+  // Restore selected tasks and notes
+  if (selectedTaskIds.length > 0 && curTasks) {
+    const tasksToRestore = {};
+    selectedTaskIds.forEach((id) => {
+      const task = curTasks.find(t => t.id === id);
+      if (task) {
+        tasksToRestore[id] = task;
       }
     });
-    overwriteNotes(toRestore);
+    
+    if (Object.keys(tasksToRestore).length > 0) {
+      chrome.storage.local.get(['tasks'], (result) => {
+        const currentTasks = result.tasks || {};
+        const updatedTasks = { ...currentTasks, ...tasksToRestore };
+        chrome.storage.local.set({ tasks: updatedTasks });
+      });
+    }
+  }
+  
+  // Restore selected notes
+  if (selectedNoteIds.length > 0 && curNotes) {
+    const notesToRestore = {};
+    selectedNoteIds.forEach((id) => {
+      const note = curNotes.find(n => n.id === id);
+      if (note) {
+        notesToRestore[id] = note;
+      }
+    });
+    
+    if (Object.keys(notesToRestore).length > 0) {
+      chrome.storage.local.get(['notes'], (result) => {
+        const currentNotes = result.notes || {};
+        const updatedNotes = { ...currentNotes, ...notesToRestore };
+        chrome.storage.local.set({ notes: updatedNotes });
+      });
+    }
   }
 }
 
@@ -589,12 +618,18 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
 
     $(document).on('click', '.btn.btn-secondary.restore-selection-btn', (event) => {
       const $restoreBtn = $(event.currentTarget);
-      if (curTags !== null) {
+      
+      // Restore selected data
+      if (curTags) {
         restoreTags(curTags);
       }
-      restoreSelectedNotes();
-      restoreSelectedTasks();
+      
+      restoreSelectedData();
+      
+      // Handle index entries
       restoreSelectedIndexEntries();
+      
+      // Show success message
       $restoreBtn.text('Restored selected data!');
       setTimeout(() => {
         $restoreBtn.text('Perform overwriting restore of selected data');
@@ -686,28 +721,50 @@ if (window.location.href.startsWith(chrome.runtime.getURL(''))) {
       if (selectedFile) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          const content = JSON.parse(e.target.result);
-
-          if (Object.prototype.hasOwnProperty.call(content, 'tags')) {
-            curTags = content.tags;
+          try {
+            const content = JSON.parse(e.target.result);
+            
+            // Store the data for later use when selections are made
+            if (content.tags) {
+              curTags = content.tags;
+            }
+            
+            // Handle tasks
+            let tasksArray = [];
+            if (content.tasks) {
+              tasksArray = Object.values(content.tasks);
+              curTasks = tasksArray;
+            }
+            
+            // Handle notes
+            let notesArray = [];
+            if (content.notes) {
+              notesArray = Object.values(content.notes);
+              curNotes = notesArray;
+            }
+            
+            // Handle indexed items
+            if (content.indexed) {
+              const indexArray = Object.values(content.indexed);
+              curIndexEntries = indexArray;
+              showIndexEntries(indexArray);
+            }
+            
+            // Show combined tasks and notes
+            showCombinedData(tasksArray, notesArray);
+            
+            // Show the selection container
+            $('#backup-select-col').removeClass('d-none');
+            
+            // Update button text to indicate success
+            $('.import-selection-btn').text('Data imported for selection');
+            setTimeout(() => {
+              $('.import-selection-btn').text('Import data for selection');
+            }, 1000);
+          } catch (error) {
+            console.error('Error parsing backup file:', error);
+            $('#ruleErrorModal').modal('show');
           }
-
-          if (Object.prototype.hasOwnProperty.call(content, 'tasks')) {
-            const tasksArray = Object.values(content.tasks);
-            showTasks(tasksArray);
-          }
-
-          if (Object.prototype.hasOwnProperty.call(content, 'notes')) {
-            const notesArray = Object.values(content.notes);
-            showNotes(notesArray);
-          }
-
-          if (Object.prototype.hasOwnProperty.call(content, 'indexed')) {
-            const indexArray = Object.values(content.indexed);
-            showIndexEntries(indexArray);
-          }
-
-          $('#backup-select-col').removeClass('d-none');
         };
         reader.readAsText(selectedFile);
       }
