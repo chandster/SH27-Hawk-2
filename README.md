@@ -28,6 +28,7 @@ To install the extension from your unzipped download:
 8. You should now be able to see Hawk 2 among your extensions! If you wish to pin it to your browser taskbar for ease of access, click the Extensions puzzle piece beside the omnibar, and click the pin beside Hawk 2.
 
 ## Features
+Below is an outline of the features offered by this Chrome extension. For a more comprehensive user guide, open the Hawk 2 Chrome extension and go to Settings > About.
 
 ### Indexing
 

@@ -1,6 +1,6 @@
 {
   "name": "hawk",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Hawk is an indexing and general convenience extension. Read the settings to learn more!",
   "main": "commitlint.config.js",
   "scripts": {
