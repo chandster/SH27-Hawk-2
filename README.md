@@ -1,6 +1,8 @@
 # Hawk 2
 
-An indexing and productivity tool with easy backup features. Keep your to-do lists, your notes, and your documentation history in one place.
+An indexing and productivity tool with easy backup features. Keep your to-do lists, notes, and documentation history in one place.
+
+You can now download <a href="https://chromewebstore.google.com/detail/hawk-2-page-indexer/ahomfccdnfmnmomcapgjdmgpebjpcogg">Hawk 2</a> from the Chrome Web Store!
 
 ## About
 Hawk 2 was built by a small team of university students for a software development team project.
